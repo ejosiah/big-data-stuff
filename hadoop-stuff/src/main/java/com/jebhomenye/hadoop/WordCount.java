@@ -14,8 +14,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-
-public class WordCount {
+public class WordCount implements MapReduceJob {
 	
 	
 	private static class WordCountMapper extends Mapper<Object, Text, Text, LongWritable>{
@@ -53,28 +52,28 @@ public class WordCount {
 		}
 
 	}
-	
-	public static void main(String[] args) throws Exception{
-		runJob(Arrays.copyOfRange(args, 0, args.length - 1), args[args.length - 1]);
+
+	public Class<WordCountMapper> mapperClass() {
+		return WordCountMapper.class;
 	}
-	
-	public static void runJob(String[] input, String output) throws Exception{
-		Configuration configuration = new Configuration();
-		
-		Job job = new Job(configuration);
-		
-		job.setJarByClass(WordCount.class);
-		job.setMapperClass(WordCountMapper.class);
-		job.setReducerClass(LongSumReducer.class);
-		job.setMapOutputKeyClass(Text.class);
-		job.setMapOutputValueClass(LongWritable.class);	
-		
-		Path outputPath = new Path(output);
-		
-		FileInputFormat.setInputPaths(job, Arrays.toString(input).replace("[", "").replace("]", ""));
-		FileOutputFormat.setOutputPath(job, outputPath);
-		
-		outputPath.getFileSystem(configuration).delete(outputPath, true);
-		job.waitForCompletion(true);
+
+	public Class<LongSumReducer> reducerClass() {
+		return LongSumReducer.class;
+	}
+
+	public Class<LongSumReducer> combiner() {
+		return LongSumReducer.class;
+	}
+
+	public Class<WordCount> jarByClass() {
+		return WordCount.class;
+	}
+
+	public Class<Text> mapOutputKeyClass() {
+		return Text.class;
+	}
+
+	public Class<LongWritable> mapOutputValueClass() {
+		return LongWritable.class;
 	}
 }
