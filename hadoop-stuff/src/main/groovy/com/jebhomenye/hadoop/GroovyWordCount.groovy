@@ -1,7 +1,5 @@
 package com.jebhomenye.hadoop
 
-import java.awt.geom.Line2D;
-import java.io.IOException;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.io.LongWritable
@@ -33,27 +31,27 @@ class GroovyWordCount implements MapReduceJob {
 	
 
 	Class mapperClass() {
-		return WordCountMapper.class;
+		WordCountMapper.class;
 	}
 
 	Class reducerClass() {
-		return LongSumReducer.class;
+		LongSumReducer.class;
 	}
 
 	Class combiner() {
-		return LongSumReducer.class;
+		LongSumReducer.class;
 	}
 
 	Class jarByClass() {
-		return GroovyWordCount.class;
+		GroovyWordCount.class;
 	}
 
 	Class mapOutputKeyClass() {
-		return Text.class;
+		Text.class;
 	}
 
 	Class mapOutputValueClass() {
-		return LongSumReducer.class;
+		LongSumReducer.class;
 	}
 
 }
